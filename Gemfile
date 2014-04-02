@@ -42,6 +42,9 @@ group :development, :test do
   gem "powder"
 end
 
+group :production do
+  gem 'newrelic_rpm'
+end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
