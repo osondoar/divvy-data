@@ -1,1 +1,1 @@
-daemon: rails runner FetchStationDataDaemon.run run
+daemon: rails runner script/daemons/update_divvy_status_daemon.rb run
