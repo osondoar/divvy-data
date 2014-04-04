@@ -94,6 +94,7 @@ GEM
     rake (10.2.2)
     rdoc (4.1.1)
       json (~> 1.4)
+    redis (3.0.7)
     ref (1.0.5)
     sass (3.2.18)
     sass-rails (4.0.2)
@@ -147,6 +148,7 @@ DEPENDENCIES
   puma
   rails (= 4.0.4)
   rails-backbone
+  redis
   sass-rails (~> 4.0.0)
   sdoc
   therubyracer
