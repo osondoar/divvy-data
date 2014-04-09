@@ -15,6 +15,12 @@ Daemons.run_proc("update_divvy_status") do
       stations.each do |station|
         station = StationStatus.from_api station.symbolize_keys, stations_response[:executionTime]
         station.save
+
+        previous_status = StationStatus.where(station_id: station.station_id).last
+        if previous_status.blank? || previous_status.available_bikes != station.available_bikes
+           $redis.del("status_#{station.station_id}")
+        end
+       
       end
 
       daemon_logger.info "Divvy time: #{stations_response[:executionTime]}. #{stations.count} statuses saved"
