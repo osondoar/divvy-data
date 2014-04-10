@@ -13,12 +13,12 @@ Daemons.run_proc("update_divvy_status") do
       stations_response = JSON.parse(response.body).symbolize_keys!
       stations = stations_response[:stationBeanList]
       stations.each do |station|
-        station = StationStatus.from_api station.symbolize_keys, stations_response[:executionTime]
-        station.save
+        station_status = StationStatus.from_api station.symbolize_keys, stations_response[:executionTime]
+        previous_status = StationStatus.where(station_id: station_status.station_id).last
+        station_status.save
 
-        previous_status = StationStatus.where(station_id: station.station_id).last
-        if previous_status.blank? || previous_status.available_bikes != station.available_bikes
-           $redis.del("status_#{station.station_id}")
+        if previous_status.blank? || previous_status.available_bikes != station_status.available_bikes
+           $redis.del("status_#{station_status.station_id}")
         end
        
       end
