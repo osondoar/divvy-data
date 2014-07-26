@@ -6,7 +6,7 @@ class StatusService
     if cached_stations 
       stations = Snappy.inflate(cached_stations)
     else
-      stations = Station.find(station_id).station_statuses.order(:id)
+      stations = Station.find(station_id).station_statuses.order(id: :desc).limit(5000)
       compressed_stations = Snappy.deflate(stations.to_json)
       $redis.set(status_cache_key(station_id), compressed_stations)
     end
