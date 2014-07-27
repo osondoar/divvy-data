@@ -17,10 +17,12 @@ Daemons.run_proc("update_divvy_status") do
         previous_status = StationStatus.where(station_id: station_status.station_id).last
         station_status.save
 
-        if previous_status.blank? || previous_status.available_bikes != station_status.available_bikes
-           $redis.del("status_#{station_status.station_id}")
-        end
-       
+        # add status to cache
+        compressed_statuses= $redis.get("status_#{station_status.station_id}")
+        statuses = compressed_statuses.nil? ? [] : JSON.parse(Snappy.inflate(compressed_statuses))
+        statuses << station_status
+        compressed_statuses = Snappy.deflate(statuses.to_json)
+        $redis.set( "status_#{station_status.station_id}", compressed_statuses)
       end
 
       daemon_logger.info "Divvy time: #{stations_response[:executionTime]}. #{stations.count} statuses saved"
