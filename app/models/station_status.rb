@@ -10,4 +10,12 @@ class StationStatus < ActiveRecord::Base
 			)
 		end
 	end
+
+	def to_json
+		{
+			station_id: station_id,
+			available_bikes: available_bikes,
+			created_at: created_at
+		}.to_json
+	end
 end
