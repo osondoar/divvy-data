@@ -1,3 +1,10 @@
 <div id="chart_div" style="width: 900px; height: 500px;"></div>
 
 <select id="stations-select">
+  <% Station.all.each do |station|  %>
+    <option value="<%= station.id %>"><%= station.name %></option>
+  <% end %>
+  
+</select>
+
+
